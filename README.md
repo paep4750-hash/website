@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>วงล้อสุ่มดวงมหาประลัย v2</title>
+    <title>วงล้อสุ่มดวงมหาประลัย v3</title>
     <style>
         * { box-sizing: border-box; user-select: none; -webkit-user-select: none; }
         body, html { 
@@ -18,8 +18,8 @@
         h1 { font-size: 1.8rem; margin-bottom: 5px; color: #facc15; text-shadow: 2px 2px #000; }
         
         /* รายการบอกเปอร์เซ็นต์ */
-        .rate-info { background: rgba(0,0,0,0.5); padding: 12px; border-radius: 12px; font-size: 0.9rem; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.15); }
-        .rate-info span { margin: 0 5px; font-weight: bold; display: inline-block; }
+        .rate-info { background: rgba(0,0,0,0.5); padding: 12px; border-radius: 12px; font-size: 0.85rem; margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.15); line-height: 1.4; }
+        .rate-info span { margin: 0 4px; font-weight: bold; display: inline-block; }
 
         /* ตัววงล้อ */
         .wheel-wrapper { position: relative; width: 320px; height: 320px; margin: 0 auto 25px auto; }
@@ -31,14 +31,15 @@
             border-top: 30px solid #ef4444; z-index: 10; filter: drop-shadow(0px 3px 5px rgba(0,0,0,0.5));
         }
 
-        /* หน้าปัดวงล้อสัดส่วนสีเหลือง/น้ำเงิน/เทา */
+        /* หน้าปัดวงล้อสัดส่วนสีตามอัตราสุ่มใหม่ */
         .wheel { 
             width: 100%; height: 100%; border-radius: 50%; 
             border: 8px solid #facc15; box-shadow: 0 0 25px rgba(0,0,0,0.6);
             background: conic-gradient(
-                #ef4444 0% 2%,    /* ไก่ทอด 2% */
-                #3b82f6 2% 69%,   /* คุณเป็นเก 67% */
-                #4b5563 69% 100%  /* เกลือ 31% */
+                #ec4899 0% 0.1%,   /* Gemini เป็นเก 0.1% */
+                #ef4444 0.1% 2.1%, /* ไก่ทอด 2% */
+                #3b82f6 2.1% 69.1%,/* คุณเป็นเก 67% */
+                #4b5563 69.1% 100% /* เกลือ 31% */
             );
             transition: transform 4s cubic-bezier(0.1, 0.8, 0.1, 1);
         }
@@ -56,7 +57,7 @@
         /* ระบบหน้าต่างข้อความเด้ง (Popup Modal) */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.75); display: flex; align-items: center;
+            background: rgba(0, 0, 0, 0.8); display: flex; align-items: center;
             justify-content: center; z-index: 100; opacity: 0; pointer-events: none;
             transition: opacity 0.3s ease;
         }
@@ -90,10 +91,10 @@
         <h1>🔮 วงล้อมหาดวง 🔮</h1>
         
         <div class="rate-info">
-            <span style="color:#ef4444">🍗 ไก่ทอด 2%</span> | 
+            <span style="color:#ec4899">✨ Geminiเป็นเก 0.1%</span> |
+            <span style="color:#ef4444">🍗 ไก่ทอด 2%</span> <br>
             <span style="color:#60a5fa">🏳️‍🌈 คุณเป็นเก 67%</span> | 
-            <span style="color:#9ca3af">🍃 เกลือ 31%</span> |
-            <span style="color:#60a5fa">🏳️‍🌈 Geminiเป็นเก 0.001%</span>
+            <span style="color:#9ca3af">🍃 เกลือ 31%</span>
         </div>
 
         <div class="wheel-wrapper">
@@ -135,45 +136,47 @@
             let targetDeg = 0;
             let resultMessage = "";
 
-            // ระบบสุ่มแบบสุ่มดวงสดแท้ร้อยเปอร์เซ็นต์อิงตามเรตที่ตั้งไว้
+            // ใช้ระบบดวงล้วนสุ่มสด 100% ตามอัตราส่วน
             let chance = Math.random() * 100;
 
-            if (chance < 2) {
-                // ได้รับไก่ทอด 2% -> สั่งให้วงล้อหยุดหมุนที่โซนสีแดง (0 ถึง 7.2 องศา)
-                targetDeg = 3.6;
+            if (chance < 0.1) {
+                // [รางวัลใหญ่สุด] Gemini เป็นเก 0.1% -> หยุดที่จุดเริ่มต้นวงล้อพอดีเป๊ะ (สีชมพู)
+                targetDeg = 0.05;
+                resultMessage = `<span style="color:#f472b6; text-shadow: 0 0 10px rgba(244,114,182,0.6);">🌟 พระเจ้าช่วย! รางวัลลับสุดยอด! 🌟<br>Gemini 0.0000.1 "Geminiเป็นเก" (0.1%)</span>`;
+            } else if (chance < 2.1) {
+                // ได้รับไก่ทอด 2% -> โซนสีแดง
+                targetDeg = 4;
                 resultMessage = `<span style="color:#f97316;">🍗 ยินดีด้วย!<br>คุณได้รับไก่ทอด (2%)</span>`;
-            } else if (chance < 69) {
-                // คุณเป็นเก 67% -> สั่งให้วงล้อหยุดหมุนที่โซนสีน้ำเงิน (7.2 ถึง 248.4 องศา)
+            } else if (chance < 69.1) {
+                // คุณเป็นเก 67% -> โซนสีน้ำเงิน
                 targetDeg = 120;
                 resultMessage = `<span style="color:#60a5fa;">🏳️‍🌈 ยินดีด้วย!<br>คุณเป็นเก (67%)</span>`;
             } else {
-                // เกลือ 31% -> สั่งให้วงล้อหยุดหมุนที่โซนสีเทา (248.4 ถึง 360 องศา)
+                // เกลือ 31% -> โซนสีเทา
                 targetDeg = 300;
                 resultMessage = `<span style="color:#9ca3af;">🍃 เสียใจด้วย...<br>คุณได้เกลือ ไม่ได้รับอะไรเลย (31%)</span>`;
             }
 
-            // คำนวณความเร็วรอบหมุนติ้วๆ 5 รอบ (1800 องศา) แล้วเหวี่ยงไปลงล็อคเป้าหมาย
+            // คำนวณองศาหมุนเหวี่ยงวงล้อ
             const finalDeg = (360 - targetDeg);
             currentRotation += 1800 + finalDeg - (currentRotation % 360);
             
             wheel.style.transform = `rotate(${currentRotation}deg)`;
 
-            // รอหน้าปัดวงล้อหมุนจนนิ่ง (4 วินาที) แล้วปล่อยหน้าต่าง Popup แจ้งข้อความเด้งขึ้นมา
+            // รอ 4 วินาทีให้วงล้อหยุด แล้วแสดงหน้าต่างแจ้งเตือน
             setTimeout(() => {
                 modalContent.innerHTML = resultMessage;
-                rewardModal.classList.add('show'); // สั่งให้หน้าต่าง Popup แสดงตัวออกจอ
+                rewardModal.classList.add('show');
                 statusText.innerText = "สุ่มเสร็จสิ้น!";
             }, 4000);
         }
 
-        // ปุ่มปิดหน้าต่างโมดอลเพื่อกลับมาสุ่มต่อได้เรื่อยๆ
         function closeModal() {
             rewardModal.classList.remove('show');
             statusText.innerText = "กดตรงกลางวงล้อเพื่อเริ่มหมุนอีกครั้ง...";
             isSpinning = false;
         }
 
-        // ผูกสัญญานสัมผัสสำหรับแท็บเล็ตและหน้าจอคอมให้กดติดง่ายและลื่นไหล
         wheelBtn.addEventListener('touchstart', startSpin, { passive: false });
         wheelBtn.addEventListener('click', startSpin);
         
