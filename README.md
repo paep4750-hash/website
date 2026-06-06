@@ -2,72 +2,40 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <title>Action RPG Battle</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Game Hub</title>
     <style>
-        body { font-family: sans-serif; text-align: center; background: #222; color: white; }
-        #game-ui { border: 2px solid #fff; width: 80%; margin: 20px auto; padding: 20px; }
+        body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: auto; padding: 20px; background-color: #f4f4f4; }
+        .card { background: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .code-box { background: #2d3436; color: #dfe6e9; padding: 15px; border-radius: 5px; overflow-x: auto; font-family: monospace; }
+        h1, h2 { color: #2c3e50; }
+        a { color: #3498db; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div id="game-ui">
-    <h1>ด่าน: <span id="level">1</span>/10</h1>
-    <h3>เงิน: <span id="money">0</span> | เลือด: <span id="hp">100</span> | พลังป้องกัน: <span id="def">0</span></h3>
-    <button onclick="fight()">ต่อสู้ (เก็บเงิน)</button>
-    
-    <hr>
-    <h2>ร้านค้า</h2>
-    <div id="shop">
-        <p>ชุดเกราะเหล็ก (Def +10): ราคา 500 | สต๊อก: <span id="stock-armor">5</span> 
-           <button onclick="buyItem('armor')">ซื้อ</button></p>
+    <header>
+        <h1>🎮 Game Scripting & Mod Hub</h1>
+    </header>
+
+    <!-- ส่วนของคู่มือ -->
+    <div class="card">
+        <h2>วิธีติดตั้งและลง Mod: Sonic 3 A.I.R.</h2>
+        <p>1. <strong>ดาวน์โหลดตัวเกม:</strong> ไปที่ <a href="https://sonic3air.org/" target="_blank">Sonic3AIR.org</a> เพื่อเลือกเวอร์ชัน Android</p>
+        <p>2. <strong>ติดตั้ง Mod:</strong> โหลด Mod จาก <a href="https://gamebanana.com/games/7523" target="_blank">GameBanana</a></p>
+        <p>3. <strong>การย้ายไฟล์:</strong> แตกไฟล์ `.zip` แล้วนำโฟลเดอร์ Mod ไปวางไว้ที่:</p>
+        <div class="code-box">/Android/data/org.sonic3air.android/files/mods/</div>
+        <p>4. <strong>เปิดใช้งาน:</strong> เข้าเกม > เลือกเมนู <strong>Mods</strong> > ติ๊กถูกเพื่อเปิดใช้งาน</p>
     </div>
-</div>
 
-<script>
-    let player = { money: 0, hp: 100, def: 0, level: 1 };
-    let shop = { armor: { price: 500, stock: 5 } };
+    <!-- ส่วนของบทความอื่นๆ -->
+    <div class="card">
+        <h2>บทความแนะนำ</h2>
+        <ul>
+            <li>พื้นฐานการเขียนสคริปต์ Roblox</li>
+            <li>เทคนิคการ Debug สคริปต์เบื้องต้น</li>
+        </ul>
+    </div>
 
-    function updateUI() {
-        document.getElementById('level').innerText = player.level;
-        document.getElementById('money').innerText = player.money;
-        document.getElementById('hp').innerText = player.hp;
-        document.getElementById('def').innerText = player.def;
-        document.getElementById('stock-armor').innerText = shop.armor.stock;
-    }
-
-    function fight() {
-        if (player.hp <= 0) { alert("ตายแล้ว! เริ่มใหม่"); player.hp = 100; return; }
-        
-        // ต่อสู้: ได้เงิน และโดนดาเมจ
-        let damage = Math.max(0, 10 - player.def); 
-        player.hp -= damage;
-        player.money += 100;
-
-        // ผ่านด่านทุกๆ 5 ครั้ง
-        if (player.money % 500 === 0 && player.level < 10) {
-            player.level++;
-            alert("ผ่านด่าน! เติมสต๊อกร้านค้าให้แล้ว");
-            restock();
-        }
-        updateUI();
-    }
-
-    function buyItem(item) {
-        if (shop[item].stock > 0 && player.money >= shop[item].price) {
-            player.money -= shop[item].price;
-            shop[item].stock -= 1;
-            player.def += 10;
-            alert("ซื้อสำเร็จ!");
-        } else {
-            alert("สินค้าหมด หรือ เงินไม่พอ!");
-        }
-        updateUI();
-    }
-
-    function restock() {
-        shop.armor.stock = 5;
-        updateUI();
-    }
-</script>
 </body>
 </html>
