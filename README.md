@@ -14,9 +14,6 @@
             <button onclick="alert('ระบบ Google Login กำลังเชื่อมต่อ...')" class="bg-white border-2 border-blue-600 text-blue-600 px-8 py-3 rounded-full font-bold hover:bg-blue-50 transition">Login with Google</button>
             <a href="explore.html" class="bg-blue-600 text-white px-8 py-3 rounded-full font-bold hover:bg-blue-700 transition">สำรวจเว็บไซต์</a>
         </div>
-    </div>
-</body>
-</html>
 
 <!DOCTYPE html>
 <html lang="th">
