@@ -4,35 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>My Personal Web</title>
+    <title>Knowledge Portal</title>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 text-gray-800">
 
-    <div id="home" class="p-8 text-center min-h-screen flex flex-col justify-center">
-        <h1 class="text-4xl font-bold mb-6">ยินดีต้อนรับสู่เว็บไซต์ของฉัน</h1>
-        <div class="space-y-4">
-            <button class="block w-full max-w-sm mx-auto bg-blue-600 text-white py-3 rounded-xl font-bold">Login with Google</button>
-            <button onclick="showExplore()" class="block w-full max-w-sm mx-auto bg-gray-800 text-white py-3 rounded-xl font-bold">สำรวจเว็บไซต์</button>
+    <div id="home" class="flex flex-col items-center justify-center min-h-screen p-6 text-center">
+        <h1 class="text-5xl font-bold mb-8">Welcome</h1>
+        <div class="flex gap-4">
+            <button class="bg-white border border-gray-300 text-gray-500 px-6 py-2 rounded-lg text-sm cursor-default">Login Google</button>
+            <button onclick="showPage('explore')" class="bg-blue-600 text-white px-6 py-2 rounded-lg text-sm hover:bg-blue-700 transition">Explore</button>
         </div>
     </div>
 
-    <div id="explore" class="hidden p-8">
-        <button onclick="showHome()" class="text-blue-600 mb-6 font-semibold">← ย้อนกลับหน้าแรก</button>
-        <h2 class="text-2xl font-bold mb-6">คลังความรู้</h2>
-        <div class="space-y-4">
-            <div class="bg-white p-4 rounded-lg shadow">ความรู้ที่ 1: การใช้แท็บเล็ตเขียนโปรแกรม</div>
-            <div class="bg-white p-4 rounded-lg shadow">ความรู้ที่ 2: พื้นฐาน HTML บนมือถือ</div>
+    <div id="explore" class="hidden p-6 max-w-4xl mx-auto">
+        <button onclick="showPage('home')" class="text-blue-600 text-sm font-semibold mb-8 hover:underline">← Home</button>
+        
+        <h2 class="text-3xl font-bold mb-8">Knowledge Base</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white p-6 rounded-xl border border-gray-200">
+                <h3 class="font-bold mb-2">Digital Strategy</h3>
+                <p class="text-sm text-gray-600">การวางกลยุทธ์ในยุคดิจิทัลต้องอาศัยการวิเคราะห์ข้อมูลเชิงลึกและการปรับตัวตามกระแสโลกอย่างรวดเร็ว</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl border border-gray-200">
+                <h3 class="font-bold mb-2">Advanced UI Design</h3>
+                <p class="text-sm text-gray-600">หลักการออกแบบ User Interface ไม่ใช่แค่ความสวยงาม แต่คือการสร้างประสบการณ์ใช้งานที่ลื่นไหลให้แก่ผู้ใช้</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl border border-gray-200">
+                <h3 class="font-bold mb-2">Data Analytics</h3>
+                <p class="text-sm text-gray-600">การเปลี่ยนข้อมูลดิบให้กลายเป็นความเข้าใจ เพื่อใช้ตัดสินใจเชิงธุรกิจที่มีประสิทธิภาพแม่นยำ</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl border border-gray-200">
+                <h3 class="font-bold mb-2">Growth Hacking</h3>
+                <p class="text-sm text-gray-600">เทคนิคการเร่งการเติบโตขององค์กรผ่านการทดสอบและการวัดผลที่รวดเร็ว (Rapid Experimentation)</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl border border-gray-200">
+                <h3 class="font-bold mb-2">Global Trends</h3>
+                <p class="text-sm text-gray-600">อัปเดตเทคโนโลยีและเศรษฐกิจโลก เพื่อให้ทันต่อการเปลี่ยนแปลงที่เกิดขึ้นในทุกๆ วัน</p>
+            </div>
+            <div class="bg-white p-6 rounded-xl border border-gray-200">
+                <h3 class="font-bold mb-2">Modern Marketing</h3>
+                <p class="text-sm text-gray-600">การเข้าถึงกลุ่มเป้าหมายในยุคที่ข้อมูลมีมากมาย การสร้างตัวตนให้โดดเด่นถือเป็นหัวใจสำคัญ</p>
+            </div>
         </div>
     </div>
 
     <script>
-        function showExplore() {
+        function showPage(pageId) {
             document.getElementById('home').classList.add('hidden');
-            document.getElementById('explore').classList.remove('hidden');
-        }
-        function showHome() {
             document.getElementById('explore').classList.add('hidden');
-            document.getElementById('home').classList.remove('hidden');
+            document.getElementById(pageId).classList.remove('hidden');
         }
     </script>
 </body>
