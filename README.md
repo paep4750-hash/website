@@ -3,57 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <title>Knowledge Portal</title>
+    <title>Script Hub</title>
+    <style>
+        /* สไตล์พื้นฐานของเว็บไซต์ */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #1e1e1e;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            max-width: 500px;
+            width: 90%;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #00ff88;
+        }
+
+        .btn {
+            background-color: #00ff88;
+            color: #121212;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #00cc6e;
+        }
+
+        .btn-secondary {
+            background-color: #555;
+            color: #fff;
+            margin-top: 15px;
+        }
+
+        .btn-secondary:hover {
+            background-color: #444;
+        }
+
+        /* ซ่อน/แสดงตามหน้า */
+        .hidden {
+            display: none;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            background-color: #2d2d2d;
+            color: #00ff88;
+            border: 1px solid #444;
+            border-radius: 6px;
+            padding: 10px;
+            font-family: monospace;
+            resize: none;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+    </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body>
 
-    <div id="home" class="flex flex-col items-center justify-center min-h-screen p-6 text-center">
-        <h1 class="text-5xl font-bold mb-8">Welcome</h1>
-        <div class="flex gap-4">
-            <button class="bg-white border border-gray-300 text-gray-500 px-6 py-2 rounded-lg text-sm cursor-default">Login Google</button>
-            <button onclick="showPage('explore')" class="bg-blue-600 text-white px-6 py-2 rounded-lg text-sm hover:bg-blue-700 transition">Explore</button>
+    <div class="container">
+        <div id="home-page">
+            <h1>ยินดีต้อนรับสู่ Script Hub</h1>
+            <button class="btn" id="explore-btn">🧭 ปุ่มสำรวจ</button>
         </div>
-    </div>
 
-    <div id="explore" class="hidden p-6 max-w-4xl mx-auto">
-        <button onclick="showPage('home')" class="text-blue-600 text-sm font-semibold mb-8 hover:underline">← Home</button>
-        
-        <h2 class="text-3xl font-bold mb-8">Knowledge Base</h2>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-white p-6 rounded-xl border border-gray-200">
-                <h3 class="font-bold mb-2">Digital Strategy</h3>
-                <p class="text-sm text-gray-600">การวางกลยุทธ์ในยุคดิจิทัลต้องอาศัยการวิเคราะห์ข้อมูลเชิงลึกและการปรับตัวตามกระแสโลกอย่างรวดเร็ว</p>
-            </div>
-            <div class="bg-white p-6 rounded-xl border border-gray-200">
-                <h3 class="font-bold mb-2">Advanced UI Design</h3>
-                <p class="text-sm text-gray-600">หลักการออกแบบ User Interface ไม่ใช่แค่ความสวยงาม แต่คือการสร้างประสบการณ์ใช้งานที่ลื่นไหลให้แก่ผู้ใช้</p>
-            </div>
-            <div class="bg-white p-6 rounded-xl border border-gray-200">
-                <h3 class="font-bold mb-2">Data Analytics</h3>
-                <p class="text-sm text-gray-600">การเปลี่ยนข้อมูลดิบให้กลายเป็นความเข้าใจ เพื่อใช้ตัดสินใจเชิงธุรกิจที่มีประสิทธิภาพแม่นยำ</p>
-            </div>
-            <div class="bg-white p-6 rounded-xl border border-gray-200">
-                <h3 class="font-bold mb-2">Growth Hacking</h3>
-                <p class="text-sm text-gray-600">เทคนิคการเร่งการเติบโตขององค์กรผ่านการทดสอบและการวัดผลที่รวดเร็ว (Rapid Experimentation)</p>
-            </div>
-            <div class="bg-white p-6 rounded-xl border border-gray-200">
-                <h3 class="font-bold mb-2">Global Trends</h3>
-                <p class="text-sm text-gray-600">อัปเดตเทคโนโลยีและเศรษฐกิจโลก เพื่อให้ทันต่อการเปลี่ยนแปลงที่เกิดขึ้นในทุกๆ วัน</p>
-            </div>
-            <div class="bg-white p-6 rounded-xl border border-gray-200">
-                <h3 class="font-bold mb-2">Modern Marketing</h3>
-                <p class="text-sm text-gray-600">การเข้าถึงกลุ่มเป้าหมายในยุคที่ข้อมูลมีมากมาย การสร้างตัวตนให้โดดเด่นถือเป็นหัวใจสำคัญ</p>
-            </div>
+        <div id="script-page" class="hidden">
+            <h1>สคริปต์ของคุณพร้อมใช้งานแล้ว</h1>
+            
+            <textarea readonly id="script-box"></textarea>
+            
+            <button class="btn" onclick="copyScript()">📋 คัดลอกสคริปต์</button>
+            <br>
+            <button class="btn btn-secondary" id="back-btn">🔙 กดย้อนกลับ</button>
         </div>
     </div>
 
     <script>
-        function showPage(pageId) {
-            document.getElementById('home').classList.add('hidden');
-            document.getElementById('explore').classList.add('hidden');
-            document.getElementById(pageId).classList.remove('hidden');
+        const homePage = document.getElementById('home-page');
+        const scriptPage = document.getElementById('script-page');
+        const exploreBtn = document.getElementById('explore-btn');
+        const backBtn = document.getElementById('back-btn');
+        const scriptBox = document.getElementById('script-box');
+
+        // 🛑 แก้ไขสคริปต์ประจำวัน/สัปดาห์ ตรงนี้ได้เลยครับ! 🛑
+        const currentScript = `-- อัปเดตล่าสุด: ${new Date().toLocaleDateString('th-TH')}
+script_key = "Free_key"
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Fluxyyy333/HoshiOnTop/main/loader.lua"))()`;
+
+        // เมื่อกดปุ่มสำรวจ -> แสดงหน้าสคริปต์ทันที
+        exploreBtn.addEventListener('click', () => {
+            homePage.classList.add('hidden');
+            scriptPage.classList.remove('hidden');
+            scriptBox.value = currentScript; // ใส่สคริปต์เข้าไปในช่อง text
+        });
+
+        // เมื่อกดย้อนกลับ -> กลับหน้าแรก
+        backBtn.addEventListener('click', () => {
+            scriptPage.classList.add('hidden');
+            homePage.classList.remove('hidden');
+        });
+
+        // ฟังก์ชันกดคัดลอกสคริปต์
+        function copyScript() {
+            scriptBox.select();
+            scriptBox.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(scriptBox.value);
+            alert("คัดลอกสคริปต์เรียบร้อยแล้ว!");
         }
     </script>
 </body>
