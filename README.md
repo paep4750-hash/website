@@ -2,182 +2,241 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<title>Gemini Access Center</title>
-<link rel="stylesheet" href="style.css">
-</head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<body>
+<title>Dark Chat</title>
 
-<div class="box">
-
-<h1>🤖 Gemini Access Center</h1>
-
-<p>
-ระบบทดสอบสิทธิ์เข้าใช้งาน AI รุ่นลับ
-</p>
-
-<div id="loginPage">
-
-<button onclick="login()">
-🔑 Login
-</button>
-
-</div>
-
-<div id="registerPage" style="display:none">
-
-<h2>ล็อกอินสำเร็จ</h2>
-
-<button onclick="registerUser()">
-📝 Register
-</button>
-
-</div>
-
-<div id="waiting" style="display:none">
-
-<h2>⏳ กำลังส่งข้อมูล...</h2>
-
-<p id="timer"></p>
-
-</div>
-
-<div id="result" style="display:none">
-
-<h2 id="status"></h2>
-
-<p id="message"></p>
-
-</div>
-
-</div>
-
-<script src="script.js"></script>
-
-</body>
-</html>
-
-body{
-
+<style>
+*{
 margin:0;
-background:linear-gradient(135deg,#0f172a,#1e3a8a);
-
-font-family:Arial;
-color:white;
-text-align:center;
-
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
 }
 
-.box{
+body{
+background:#0d1117;
+color:#fff;
+display:flex;
+justify-content:center;
+padding:20px;
+}
 
-margin:auto;
-margin-top:80px;
+.container{
+width:100%;
+max-width:800px;
+background:#161b22;
+padding:20px;
+border-radius:18px;
+box-shadow:0 0 30px rgba(0,255,255,.15);
+}
 
-width:400px;
+h1{
+text-align:center;
+margin-bottom:20px;
+color:#00d4ff;
+}
 
-background:#202020;
+.chat{
+background:#0b1015;
+height:420px;
+overflow-y:auto;
+padding:15px;
+border-radius:15px;
+margin-bottom:20px;
+}
 
-padding:30px;
+.msg{
+max-width:75%;
+padding:12px;
+border-radius:15px;
+margin:10px 0;
+word-wrap:break-word;
+animation:fade .25s;
+}
 
-border-radius:20px;
+.me{
+margin-left:auto;
+background:#00bcd4;
+}
 
-box-shadow:0 0 30px cyan;
+.you{
+background:#333;
+}
 
+@keyframes fade{
+from{
+opacity:0;
+transform:translateY(10px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
 }
 
 button{
-
-padding:15px 35px;
-
-font-size:18px;
-
+width:100%;
+padding:12px;
+margin-top:10px;
+background:#00bcd4;
 border:none;
-
 border-radius:10px;
-
-background:#00bfff;
-
 color:white;
-
+font-size:16px;
 cursor:pointer;
-
-transition:.3s;
-
+transition:.25s;
 }
 
 button:hover{
+background:#00dfff;
+}
 
-transform:scale(1.08);
+textarea{
+width:100%;
+height:70px;
+margin-top:10px;
+background:#20252d;
+border:none;
+color:white;
+padding:10px;
+border-radius:10px;
+resize:none;
+}
 
-background:#00ffff;
+.box{
+margin-top:15px;
+}
+
+#youBox{
+display:none;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>💬 Dark Chat</h1>
+
+<div id="chat" class="chat"></div>
+
+<div class="box">
+
+<button onclick="toggleBox('meBox')">
+🧑 พิมพ์ฝั่งเรา
+</button>
+
+<div id="meBox">
+
+<textarea id="meText" placeholder="พิมพ์ข้อความ..."></textarea>
+
+<button onclick="sendMe()">
+ส่งข้อความ
+</button>
+
+</div>
+
+</div>
+
+<div class="box">
+
+<button onclick="toggleBox('youBox')">
+🤖 เปิด/ปิด ฝั่งอีกฝ่าย
+</button>
+
+<div id="youBox">
+
+<textarea id="youText" placeholder="พิมพ์ข้อความของอีกฝ่าย..."></textarea>
+
+<button onclick="sendYou()">
+ส่งข้อความ
+</button>
+
+</div>
+
+</div>
+
+<button onclick="clearChat()">
+🗑️ ล้างแชททั้งหมด
+</button>
+
+</div>
+
+<script>
+
+function sendMe(){
+
+let t=document.getElementById("meText");
+
+if(t.value.trim()=="") return;
+
+let div=document.createElement("div");
+
+div.className="msg me";
+
+div.innerText=t.value;
+
+document.getElementById("chat").appendChild(div);
+
+t.value="";
+
+scrollDown();
 
 }
 
-function login(){
+function sendYou(){
 
-document.getElementById("loginPage").style.display="none";
+let t=document.getElementById("youText");
 
-document.getElementById("registerPage").style.display="block";
+if(t.value.trim()=="") return;
 
-}
+let div=document.createElement("div");
 
-function registerUser(){
+div.className="msg you";
 
-document.getElementById("registerPage").style.display="none";
+div.innerText=t.value;
 
-document.getElementById("waiting").style.display="block";
+document.getElementById("chat").appendChild(div);
 
-// 1 ชั่วโมง
-let seconds=3600;
+t.value="";
 
-// ทดสอบเร็ว ๆ เปลี่ยนเป็น
-// let seconds=10;
-
-let timer=setInterval(function(){
-
-seconds--;
-
-let h=Math.floor(seconds/3600);
-let m=Math.floor((seconds%3600)/60);
-let s=seconds%60;
-
-document.getElementById("timer").innerHTML=
-h+" ชั่วโมง "+m+" นาที "+s+" วินาที";
-
-if(seconds<=0){
-
-clearInterval(timer);
-
-finish();
+scrollDown();
 
 }
 
-},1000);
+function toggleBox(id){
 
-}
+let box=document.getElementById(id);
 
-function finish(){
+if(box.style.display=="none"||box.style.display==""){
 
-document.getElementById("waiting").style.display="none";
-
-document.getElementById("result").style.display="block";
-
-let pass=Math.random()<0.5;
-
-if(pass){
-
-document.getElementById("status").innerHTML="✅ ผ่าน";
-
-document.getElementById("message").innerHTML=
-"Gemini อนุมัติการใช้งานเรียบร้อย 😂";
+box.style.display="block";
 
 }else{
 
-document.getElementById("status").innerHTML="❌ ไม่ผ่าน";
-
-document.getElementById("message").innerHTML=
-"Gemini ตรวจพบว่าคุณ...กดเร็วเกินไป 🤣";
+box.style.display="none";
 
 }
 
 }
+
+function clearChat(){
+
+document.getElementById("chat").innerHTML="";
+
+}
+
+function scrollDown(){
+
+let chat=document.getElementById("chat");
+
+chat.scrollTop=chat.scrollHeight;
+
+}
+
+</script>
+
+</body>
+</html>
