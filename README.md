@@ -125,7 +125,7 @@ display:none;
 <div class="box">
 
 <button onclick="toggleBox('meBox')">
-🧑 พิมพ์ฝั่งเรา
+🧑 พิมพ์
 </button>
 
 <div id="meBox">
@@ -143,7 +143,7 @@ display:none;
 <div class="box">
 
 <button onclick="toggleBox('youBox')">
-🤖 เปิด/ปิด ฝั่งอีกฝ่าย
+🤖 เปิด/ปิด ติดต่อเราได้ที่นี่
 </button>
 
 <div id="youBox">
