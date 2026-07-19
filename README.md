@@ -125,6 +125,85 @@ margin-top:15px;
 #youBox{
 display:none;
 }
+
+/* --- เริ่มต้นสไตล์ระบบยืนยันตัวตนที่เพิ่มเข้ามา --- */
+#authBox {
+background: #0b1015;
+padding: 25px;
+border-radius: 15px;
+text-align: center;
+margin-top: 10px;
+margin-bottom: 20px;
+border: 1px dashed #00bcd4;
+}
+.auth-btn-verify {
+background: #00bcd4;
+color: white;
+padding: 14px;
+border: none;
+border-radius: 10px;
+font-size: 16px;
+font-weight: bold;
+cursor: pointer;
+width: 100%;
+transition: 0.25s;
+}
+.auth-btn-verify:hover {
+background: #00dfff;
+}
+.auth-btn-verify:disabled {
+background: #555 !important;
+color: #aaa;
+cursor: not-allowed;
+}
+.auth-timer {
+font-size: 18px;
+font-weight: bold;
+color: #00d4ff;
+margin-top: 15px;
+letter-spacing: 0.5px;
+}
+/* --- สิ้นสุดสไตล์ระบบยืนยันตัวตน --- */
+
+/* --- สไตล์สำหรับ Modal ยืนยันการลบแชท เพื่อเลี่ยงการใช้ alert/confirm บน iframe --- */
+.modal-overlay {
+display: none;
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: rgba(0,0,0,0.7);
+justify-content: center;
+align-items: center;
+z-index: 1000;
+}
+.modal-content {
+background: #161b22;
+padding: 20px;
+border-radius: 15px;
+text-align: center;
+max-width: 400px;
+width: 90%;
+border: 2px solid #00bcd4;
+}
+.modal-buttons {
+display: flex;
+gap: 10px;
+margin-top: 15px;
+}
+.modal-btn-confirm {
+background: #ff4444;
+}
+.modal-btn-confirm:hover {
+background: #ff6666;
+}
+.modal-btn-cancel {
+background: #555;
+}
+.modal-btn-cancel:hover {
+background: #777;
+}
 </style>
 
 </head>
@@ -132,7 +211,18 @@ display:none;
 
 <div class="container">
 
-<h1>💬 Dark Chat ระบบ AI 2.0 </h1>
+<h1>💬 Dark Chat ระบบ AI 3.0 </h1>
+
+<!-- เพิ่มเติม: หน้าต่างยืนยันตัวตนจะแสดงเป็นอันดับแรก -->
+<div id="authBox">
+    <h2 style="font-size: 18px; color: #00d4ff; margin-bottom: 8px;">🔐 ระบบความปลอดภัยและการยืนยันตัวตน</h2>
+    <p style="font-size: 14px; color: #888; margin-bottom: 15px;">กรุณากดปุ่มเพื่อยืนยันสิทธิ์เข้าใช้งานระบบแชท (ใช้เวลาดำเนินการ 40 วินาที)</p>
+    <button id="authBtn" class="auth-btn-verify" onclick="startAuthVerification()">🛡️ เริ่มต้นการยืนยันตัวตน</button>
+    <div id="authTimer" class="auth-timer" style="display: none;"></div>
+</div>
+
+<!-- เพิ่มเติม: ห่อหุ้มเนื้อหาเดิมทั้งหมดไว้ใน chatWrapper และซ่อนไว้ก่อนยืนยันสิทธิ์สำเร็จ -->
+<div id="chatWrapper" style="display: none;">
 
 <div id="chat" class="chat"></div>
 
@@ -177,10 +267,24 @@ display:none;
 
 </div>
 
-<button onclick="clearChat()">
+<button onclick="showClearChatModal()">
 🗑️ ล้างแชททั้งหมด
 </button>
 
+</div> <!-- ปิด chatWrapper -->
+
+</div>
+
+<!-- Custom Modal สำหรับยืนยันการล้างแชท -->
+<div id="confirmModal" class="modal-overlay">
+    <div class="modal-content">
+        <h3>🗑️ ยืนยันการล้างแชท</h3>
+        <p style="margin-top: 10px; color: #ccc;">ต้องการล้างแชททั้งหมดใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้</p>
+        <div class="modal-buttons">
+            <button class="modal-btn-confirm" onclick="clearChatAndClose()">ใช่, ล้างทั้งหมด</button>
+            <button class="modal-btn-cancel" onclick="closeClearChatModal()">ยกเลิก</button>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -263,17 +367,25 @@ function toggleBox(id){
 
   }
 
+  // ปรับปรุงฟังก์ชันการล้างแชทแบบ Custom Modal
+  function showClearChatModal(){
+    document.getElementById("confirmModal").style.display = "flex";
+  }
+
+  function closeClearChatModal(){
+    document.getElementById("confirmModal").style.display = "none";
+  }
+
+  function clearChatAndClose(){
+    chat.innerHTML = "";
+    localStorage.removeItem("darkChat");
+    closeClearChatModal();
+  }
+
+  // รองรับการทำงานของฟังก์ชันเดิมกรณีมีการเรียกใช้ตรงๆ
   function clearChat(){
-
-    if(confirm("ต้องการล้างแชททั้งหมดใช่หรือไม่?")){
-
-        chat.innerHTML = "";
-
-        localStorage.removeItem("darkChat");
-
-    }
-
-}
+    showClearChatModal();
+  }
 
 function scrollDown(){
 
@@ -306,7 +418,49 @@ document.getElementById("youText").addEventListener("keydown",function(e){
     }
 
 });
+
+// --- เริ่มต้นสคริปต์ระบบยืนยันตัวตนที่เพิ่มขึ้นมา ---
+function checkVerification() {
+    // ใช้ sessionStorage เพื่อบันทึกการยืนยันตัวตนของเซสชันปัจจุบัน (รีเฟรชหน้าแล้วไม่ต้องรอใหม่)
+    if (sessionStorage.getItem("darkChatVerified") === "true") {
+        document.getElementById("authBox").style.display = "none";
+        document.getElementById("chatWrapper").style.display = "block";
+        scrollDown();
+    }
+}
+
+function startAuthVerification() {
+    const btn = document.getElementById("authBtn");
+    const timerDiv = document.getElementById("authTimer");
+    
+    btn.disabled = true;
+    timerDiv.style.display = "block";
+    
+    let secondsLeft = 40;
+    timerDiv.innerText = `⏳ กรุณารอสักครู่... กำลังเชื่อมต่อระบบความปลอดภัย (${secondsLeft} วินาที)`;
+    
+    const countdown = setInterval(() => {
+        secondsLeft--;
+        timerDiv.innerText = `⏳ กรุณารอสักครู่... กำลังเชื่อมต่อระบบความปลอดภัย (${secondsLeft} วินาที)`;
+        
+        if (secondsLeft <= 0) {
+            clearInterval(countdown);
+            // บันทึกความสำเร็จในการยืนยันตัวตน
+            sessionStorage.setItem("darkChatVerified", "true");
+            
+            // เปลี่ยนหน้ากากแชท
+            document.getElementById("authBox").style.display = "none";
+            document.getElementById("chatWrapper").style.display = "block";
+            scrollDown();
+        }
+    }, 1000);
+}
+
+// เรียกใช้เพื่อเช็คการยืนยันตัวตนทันทีเมื่อเปิดหน้าเว็บ
+checkVerification();
+// --- สิ้นสุดสคริปต์ระบบยืนยันตัวตน ---
 </script>
 
 </body>
 </html>
+
