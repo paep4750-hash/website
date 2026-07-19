@@ -118,7 +118,7 @@ display:none;
 
 <div class="container">
 
-<h1>💬 Dark Chat เกิดข้อผิดพลาด </h1>
+<h1>💬 Dark Chat </h1>
 
 <div id="chat" class="chat"></div>
 
