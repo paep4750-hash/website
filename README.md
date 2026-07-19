@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="th">
 <head>
 <meta charset="UTF-8">
@@ -118,7 +118,7 @@ display:none;
 
 <div class="container">
 
-<h1>💬 Dark Chat </h1>
+<h1>💬 Dark Chat</h1>
 
 <div id="chat" class="chat"></div>
 
@@ -156,6 +156,11 @@ display:none;
 
 </div>
 
+<!-- ปุ่มเข้า Discord Server -->
+<button onclick="window.open('https://discord.gg/YUZY3uVwM','_blank')">
+🌐 เข้า Server หลัก
+</button>
+
 </div>
 
 <button onclick="clearChat()">
@@ -166,76 +171,127 @@ display:none;
 
 <script>
 
+const chat = document.getElementById("chat");
+
+// โหลดแชทเมื่อเปิดเว็บ
+loadChat();
+
+function saveChat(){
+    localStorage.setItem("darkChat", chat.innerHTML);
+}
+
+function loadChat(){
+    const data = localStorage.getItem("darkChat");
+
+    if(data){
+        chat.innerHTML = data;
+        scrollDown();
+    }
+}
+
 function sendMe(){
 
-let t=document.getElementById("meText");
+    let t = document.getElementById("meText");
 
-if(t.value.trim()=="") return;
+    if(t.value.trim()=="") return;
 
-let div=document.createElement("div");
+    let div = document.createElement("div");
 
-div.className="msg me";
+    div.className = "msg me";
 
-div.innerText=t.value;
+    div.innerText = t.value;
 
-document.getElementById("chat").appendChild(div);
+    chat.appendChild(div);
 
-t.value="";
+    t.value = "";
 
-scrollDown();
+    saveChat();
+
+    scrollDown();
 
 }
 
 function sendYou(){
 
-let t=document.getElementById("youText");
+    let t = document.getElementById("youText");
 
-if(t.value.trim()=="") return;
+    if(t.value.trim()=="") return;
 
-let div=document.createElement("div");
+    let div = document.createElement("div");
 
-div.className="msg you";
+    div.className = "msg you";
 
-div.innerText=t.value;
+    div.innerText = t.value;
 
-document.getElementById("chat").appendChild(div);
+    chat.appendChild(div);
 
-t.value="";
+    t.value = "";
 
-scrollDown();
+    saveChat();
+
+    scrollDown();
 
 }
 
 function toggleBox(id){
 
-let box=document.getElementById(id);
+    let box = document.getElementById(id);
 
-if(box.style.display=="none"||box.style.display==""){
+    if(box.style.display=="none" || box.style.display==""){
 
-box.style.display="block";
+        box.style.display="block";
 
-}else{
+    }else{
 
-box.style.display="none";
+        box.style.display="none";
 
-}
+    }
 
-}
+  }
 
-function clearChat(){
+  function clearChat(){
 
-document.getElementById("chat").innerHTML="";
+    if(confirm("ต้องการล้างแชททั้งหมดใช่หรือไม่?")){
+
+        chat.innerHTML = "";
+
+        localStorage.removeItem("darkChat");
+
+    }
 
 }
 
 function scrollDown(){
 
-let chat=document.getElementById("chat");
-
-chat.scrollTop=chat.scrollHeight;
+    chat.scrollTop = chat.scrollHeight;
 
 }
 
+// กด Enter เพื่อส่งข้อความฝั่งเรา
+document.getElementById("meText").addEventListener("keydown",function(e){
+
+    if(e.key==="Enter" && !e.shiftKey){
+
+        e.preventDefault();
+
+        sendMe();
+
+    }
+
+});
+
+// กด Enter เพื่อส่งข้อความฝั่งอีกฝ่าย
+document.getElementById("youText").addEventListener("keydown",function(e){
+
+    if(e.key==="Enter" && !e.shiftKey){
+
+        e.preventDefault();
+
+        sendYou();
+
+    }
+
+});
 </script>
 
 </body>
