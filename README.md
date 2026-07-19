@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Dark Chat ถูกแฮก </title>
+<title>Dark Chat</title>
 
 <style>
 *{
@@ -118,7 +118,7 @@ display:none;
 
 <div class="container">
 
-<h1>💬 Dark Chat</h1>
+<h1>💬 Dark Chat ระบบ AI 2.0 </h1>
 
 <div id="chat" class="chat"></div>
 
