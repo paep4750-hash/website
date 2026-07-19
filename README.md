@@ -29,6 +29,20 @@ background:#161b22;
 padding:20px;
 border-radius:18px;
 box-shadow:0 0 30px rgba(0,255,255,.15);
+/* เพิ่มขอบเรนโบว์แบบเคลื่อนไหว (Rainbow Border) */
+border: 4px solid transparent;
+background-image: linear-gradient(#161b22, #161b22), linear-gradient(120deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #8b00ff, #ff0000);
+background-origin: border-box;
+background-clip: padding-box, border-box;
+background-size: 200% auto;
+animation: rainbow-border 4s linear infinite;
+}
+
+/* ออนิเมชันสำหรับขอบเรนโบว์ */
+@keyframes rainbow-border {
+0% { background-position: 0% 50%; }
+50% { background-position: 100% 50%; }
+100% { background-position: 0% 50%; }
 }
 
 h1{
@@ -148,7 +162,7 @@ display:none;
 
 <div id="youBox">
 
-<textarea id="youText" placeholder="พิมพ์ข้อความของอีกฝ่าย..."></textarea>
+<textarea id="youText" placeholder="พิมพ์ข้อความส่งไปยังserver..."></textarea>
 
 <button onclick="sendYou()">
 ส่งข้อความ
