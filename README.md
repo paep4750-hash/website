@@ -204,6 +204,13 @@ background: #555;
 .modal-btn-cancel:hover {
 background: #777;
 }
+
+/* ออนิเมชันปุ่มรับ Robux ดึงดูดสายตา */
+@keyframes pulse-robux {
+0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(233, 30, 99, 0.7); }
+70% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(233, 30, 99, 0); }
+100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(233, 30, 99, 0); }
+}
 </style>
 
 </head>
@@ -271,6 +278,31 @@ background: #777;
 🗑️ ล้างแชททั้งหมด
 </button>
 
+<!-- ================= เริ่มต้นฟังก์ชันพิเศษเพิ่มเติม (ยอมรับเกน, รับเกน, เอา 10 robux) ================= -->
+<div id="gainSystemBox" style="margin-top: 15px; padding: 15px; background: #0b1015; border-radius: 15px; border: 1px dashed #e91e63; text-align: center;">
+    <h3 style="font-size: 16px; color: #e91e63; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+        🎁 ระบบรับสิทธิ์และโบนัสเกณฑ์พิเศษ
+    </h3>
+    <p style="font-size: 13px; color: #aaa; margin-bottom: 12px;">กดยอมรับเกนและรอเวลาเพื่อปลดล็อกฟังก์ชันรับ Robux</p>
+    
+    <div style="display: flex; gap: 10px;">
+        <button id="btnAcceptGain" style="margin-top: 0; background: #4caf50; flex: 1; font-weight: bold;" onclick="startGainTimer()">
+            ✅ ยอมรับเกน
+        </button>
+        <button id="btnClaimGain" style="margin-top: 0; background: #9e9e9e; flex: 1; font-weight: bold; cursor: not-allowed;" onclick="claimGain()" disabled>
+            🎁 รับเกน
+        </button>
+    </div>
+    
+    <div id="gainTimerStatus" style="font-size: 14px; font-weight: bold; color: #ffeb3b; margin-top: 12px; display: none;"></div>
+
+    <!-- ปุ่มลับ เอา 10 robux จะปรากฏขึ้นหลังกดรับเกนสำเร็จ -->
+    <button id="btnGetRobux" style="display: none; background: #e91e63; font-weight: bold; margin-top: 15px; animation: pulse-robux 1.5s infinite;" onclick="showRobuxSuccessModal()">
+        🎮 เอา 10 robux
+    </button>
+</div>
+<!-- ================= สิ้นสุดฟังก์ชันพิเศษเพิ่มเติม ================= -->
+
 </div> <!-- ปิด chatWrapper -->
 
 </div>
@@ -283,6 +315,22 @@ background: #777;
         <div class="modal-buttons">
             <button class="modal-btn-confirm" onclick="clearChatAndClose()">ใช่, ล้างทั้งหมด</button>
             <button class="modal-btn-cancel" onclick="closeClearChatModal()">ยกเลิก</button>
+        </div>
+    </div>
+</div>
+
+<!-- ================= Custom Modal สำหรับแสดงการโอน Robux สำเร็จ ================= -->
+<div id="robuxSuccessModal" class="modal-overlay">
+    <div class="modal-content" style="border-color: #e91e63;">
+        <h3 style="color: #ff4081;">🎉 ดำเนินการรับ Robux สำเร็จ!</h3>
+        <p style="margin-top: 12px; color: #eee; font-size: 15px;">ระบบทำการอนุมัติสิทธิ์การโอนย้ายสำเร็จ</p>
+        <div style="background: #20252d; padding: 10px; border-radius: 8px; margin: 12px 0; border: 1px solid #444;">
+            <span style="color: #888; font-size: 13px;">เป้าหมายบัญชีผู้ใช้</span><br>
+            <strong style="color: #00e5ff; font-size: 16px; letter-spacing: 0.5px;">Roblox ID: 9437139923</strong>
+        </div>
+        <p style="color: #4caf50; font-size: 14px; font-weight: bold;">⭐ จำนวนที่ได้รับ: 10 Robux</p>
+        <div class="modal-buttons" style="justify-content: center;">
+            <button class="modal-btn-cancel" style="background: #e91e63; width: auto; padding: 10px 25px;" onclick="closeRobuxSuccessModal()">ตกลง</button>
         </div>
     </div>
 </div>
@@ -459,6 +507,62 @@ function startAuthVerification() {
 // เรียกใช้เพื่อเช็คการยืนยันตัวตนทันทีเมื่อเปิดหน้าเว็บ
 checkVerification();
 // --- สิ้นสุดสคริปต์ระบบยืนยันตัวตน ---
+
+
+// ================= เริ่มต้นสคริปต์การทำงานของระบบเกน (ยอมรับเกน / รับเกน / 10 Robux) =================
+function startGainTimer() {
+    const btnAccept = document.getElementById("btnAcceptGain");
+    const timerStatus = document.getElementById("gainTimerStatus");
+    
+    // ปิดการใช้งานปุ่ม "ยอมรับเกน" หลังเปิดใช้งาน
+    btnAccept.disabled = true;
+    btnAccept.style.background = "#555";
+    btnAccept.innerText = "⏳ ยอมรับแล้ว";
+    
+    timerStatus.style.display = "block";
+    let timerVal = 20;
+    timerStatus.innerText = `⏳ กรุณารอเวลาดำเนินการตรวจสอบสิทธิ์ (${timerVal} วินาที)`;
+    
+    const progress = setInterval(() => {
+        timerVal--;
+        timerStatus.innerText = `⏳ กรุณารอเวลาดำเนินการตรวจสอบสิทธิ์ (${timerVal} วินาที)`;
+        
+        if (timerVal <= 0) {
+            clearInterval(progress);
+            timerStatus.innerText = "⭐ ตรวจสอบสำเร็จ! สามารถคลิกปุ่ม 'รับเกน' ด้านข้างได้ทันที";
+            
+            // เปิดใช้งานปุ่ม "รับเกน"
+            const btnClaim = document.getElementById("btnClaimGain");
+            btnClaim.disabled = false;
+            btnClaim.style.background = "#ff9800";
+            btnClaim.style.cursor = "pointer";
+        }
+    }, 1000);
+}
+
+function claimGain() {
+    const btnClaim = document.getElementById("btnClaimGain");
+    
+    // ปิดการใช้งานหลังถูกกดรับ
+    btnClaim.disabled = true;
+    btnClaim.style.background = "#555";
+    btnClaim.innerText = "✅ รับแล้ว";
+    btnClaim.style.cursor = "not-allowed";
+    
+    document.getElementById("gainTimerStatus").innerText = "🎉 รับเกนสำเร็จแล้ว! สิทธิ์โบนัสเพิ่มขึ้นด้านล่าง";
+    
+    // แสดงปุ่มลับ เอา 10 robux
+    document.getElementById("btnGetRobux").style.display = "block";
+}
+
+function showRobuxSuccessModal() {
+    document.getElementById("robuxSuccessModal").style.display = "flex";
+}
+
+function closeRobuxSuccessModal() {
+    document.getElementById("robuxSuccessModal").style.display = "none";
+}
+// ================= สิ้นสุดสคริปต์การทำงานของระบบเกน =================
 </script>
 
 </body>
